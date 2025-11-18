@@ -23,7 +23,7 @@ from sentence_transformers import SentenceTransformer
 import tensorflow as tf
 tf.get_logger().setLevel("ERROR")
 
-DEFAULT_MODEL_DIR = Path("intents_model")
+DEFAULT_MODEL_DIR = Path("./Code/intents_model")
 DEFAULT_MODEL_DIR.mkdir(parents=True, exist_ok=True)
 
 _DEFAULT_ENCODER_NAME = "paraphrase-multilingual-MiniLM-L12-v2"
@@ -134,6 +134,7 @@ def predict_intent(text: str, model_dir: str | Path = DEFAULT_MODEL_DIR) -> dict
 
     model_dir = Path(model_dir)
     if not (model_dir / "classifier.joblib").exists():
+        print(model_dir);
         raise FileNotFoundError("⚠️ Classifier non trouvé. Lancez d’abord l’entraînement.")
 
     model_name = (model_dir / "model_name.txt").read_text(encoding="utf-8").strip()

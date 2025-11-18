@@ -23,20 +23,14 @@ from model_intents import predict_intent
 from nlp_engine import traiter_question_utilisateur
 from questions import get_bot_response  
 from logic.programmes import (
-    get_programme_date_range_detailed,
-    get_event_locations_detailed,
-    get_programme_enfant_general_detailed,
-    get_event_hours_detailed,
-    get_editors_count_global,
-    get_event_price_detailed,
-    get_programme_duration_global,
-    get_editors_count_detailed,
-    get_editors_countries_of_origin,
-    get_programme_28_avril,
-    get_programme_07_mai,
-    get_programme_by_date_detailed,
-    get_programme_enfant_general_detailed
+   programmes_foire_2023, programmes_enfant_2023, get_programme_28_avril, get_programme_07_mai,
+   get_programme_duration_global, get_programme_by_date_global, get_programme_enfant_general_global,
+   get_all_programme_combined_dates_global, get_foire_end_date_global, get_foire_start_date_global,
+   get_programme_date_range, get_event_locations_global, get_event_hours_global, get_event_price_global,    get_editors_count_global,get_event_locations_detailed, get_event_hours_detailed, get_programme_enfant_general_detailed, 
+   get_editors_count_detailed,  get_event_duration_detailed, get_event_hours_detailed, get_event_locations_detailed, get_programme_by_date_detailed,
+   get_event_price_detailed, get_programme_date_range_detailed ,get_all_programmes_detailed,  get_editors_countries_of_origin,
 ) 
+import traceback
 
 
 # ────────────────────────────────────────────── # ⚙️ Config # ───────────────────────────────────────── #
@@ -303,25 +297,42 @@ def ask():
             print(f"[ASK] 🎯 Intent détecté : {intent} (confiance = {confidence:.2f})")
         except Exception as e:
             print(f"[ERREUR INTENT MODEL] {e}")
+            traceback.print_exc()
             intent = "unknown"
             confidence = 0.0
 
         # --- 3️⃣ Mapping des fonctions logiques ---
         mapping = {
+            "programmes_foire_2023": programmes_foire_2023,
+            "programmes_enfant_2023": programmes_enfant_2023,
             "get_programme_28_avril": get_programme_28_avril,
             "programme_28_avril": get_programme_28_avril,
             "get_programme_07_mai": get_programme_07_mai,
             "programme_07_mai": get_programme_07_mai,
-            "get_programme_by_date_detailed": get_programme_by_date_detailed,
-            "get_programme_date_range_detailed": get_programme_date_range_detailed,
-            "get_programme_enfant_general_detailed": get_programme_enfant_general_detailed,
+            "get_programme_duration_global": get_programme_duration_global,
+            "get_programme_by_date_global": get_programme_by_date_global,
+            "get_programme_enfant_general_global": get_programme_enfant_general_global,
+            "get_all_programme_combined_dates_global": get_all_programme_combined_dates_global,
+            "get_foire_end_date_global": get_foire_end_date_global,
+            "get_foire_start_date_global": get_foire_start_date_global,
+            "get_programme_date_range": get_programme_date_range,
+            "get_event_locations_global": get_event_locations_global,
+            "get_event_hours_global": get_event_hours_global,
+            "get_event_price_global": get_event_price_global,
+            "get_editors_count_global": get_editors_count_global,
+        
             "get_event_locations_detailed": get_event_locations_detailed,
             "get_event_hours_detailed": get_event_hours_detailed,
-            "get_event_price_detailed": get_event_price_detailed,
-            "get_editors_count_global": get_editors_count_global,
+            "get_programme_enfant_general_detailed": get_programme_enfant_general_detailed,
             "get_editors_count_detailed": get_editors_count_detailed,
+            "get_event_duration_detailed": get_event_duration_detailed,
+            "get_programme_by_date_detailed": get_programme_by_date_detailed,
+            "get_event_price_detailed": get_event_price_detailed,
+            "get_programme_date_range_detailed": get_programme_date_range_detailed,
+            "get_all_programmes_detailed": get_all_programmes_detailed,
             "get_editors_countries_of_origin": get_editors_countries_of_origin,
         }
+
 
         # --- 4️⃣ Si l’intent correspond à une action logique ---
         if intent in mapping:
@@ -537,7 +548,7 @@ def ping():
 
 if __name__ == "__main__":
     import os
-    port = int(os.environ.get("PORT", 8080))
+    port = int(os.environ.get("PORT", 5432))
     app.run(host="0.0.0.0", port=port)
 
 
